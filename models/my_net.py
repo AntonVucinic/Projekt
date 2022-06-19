@@ -49,7 +49,7 @@ def main():
 
     transform = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Resize((256, 256))
+        # transforms.Resize((256, 256))
     ])
 
     img = Image.open(sys.argv[1])

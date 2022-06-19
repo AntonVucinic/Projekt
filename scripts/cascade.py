@@ -1,8 +1,8 @@
 import sys
 
 import cv2 as cv
-from ..data.custom_celeba import CelebA, xywh2xyxy
-from torchvision.transforms import PILToTensor
+from data.custom_celeba import CelebA, xywh2xyxy
+from torchvision.transforms import functional as F
 
 
 def main():
@@ -14,8 +14,7 @@ def main():
 
     data = CelebA(
         celeba_root,
-        'all',
-        transform=PILToTensor(),
+        'valid',
         target_transform=xywh2xyxy
     )
 
@@ -26,13 +25,16 @@ def main():
         f.write(f'{len(data)}\n')
         f.write('image_id\tboxes\n')
 
-        for idx, (img, _) in enumerate(data):
+        for img, _ in data:
+            name = img.filename.split('/')[-1]
+            img = F.pil_to_tensor(img)
+            
             ndarr = img.permute((1, 2, 0)).numpy()
             img_gray = cv.cvtColor(ndarr, cv.COLOR_RGB2GRAY)
             img_gray = cv.equalizeHist(img_gray)
 
             pred = face_cascade.detectMultiScale(img_gray)
-            f.write(f'{idx:06d}.jpg\t{pred!r}\n')
+            f.write(f'{name}\t{pred!r}\n')
 
 
 if __name__ == '__main__':

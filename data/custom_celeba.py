@@ -8,7 +8,7 @@ import PIL
 import torch
 from torchvision.datasets import VisionDataset
 
-CSV = namedtuple("CSV", ["header", "index", "data"])
+CSV = namedtuple('CSV', ['header', 'index', 'data'])
 
 
 class CelebA(VisionDataset):
